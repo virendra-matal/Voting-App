@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,9 @@ public class MainController {
 	@Autowired
 	private VoteDetailsRepository voteRepo;
 	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 	
 	@GetMapping("/register")
 	public String REgistrationPage() {
@@ -50,6 +54,9 @@ public class MainController {
 	
 	@PostMapping("/doregister")
 	public String RegisterProcess(@ModelAttribute("user") User user) {
+		System.out.println("data is : "+user);
+		user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));;
+		user.setRole("ROLE_USER");
 		System.out.println("data is : "+user);
 		userRepo.save(user);
 		return "login";
@@ -92,9 +99,10 @@ public class MainController {
 	
 	
 	@PostMapping("/dovote")
-	public String VoteProcess(@RequestParam("exampleRadios") int exampleRadios, HttpSession session, Model model){
+	public String VoteProcess(@RequestParam("exampleRadios") int exampleRadios, HttpSession session, Model model, Principal principal){
 		try {
-		String username = (String) session.getAttribute("username");
+		//String username = (String) session.getAttribute("username");
+		String username = principal.getName();
 		User user = userRepo.findByUsername(username);
 		if(user.isVoted()== true) {
 			session.setAttribute("message", new MyResponse("You are already voted", "alert-danger"));
@@ -141,9 +149,10 @@ public class MainController {
 	
 	
 	@GetMapping("/vote")
-	public String ShowVote(Model model, HttpSession session) {
+	public String ShowVote(Model model, HttpSession session, Principal principal) {
 		try {
-			String username = (String) session.getAttribute("username");
+			//String username = (String) session.getAttribute("username");
+			String username = principal.getName();
 			User user = userRepo.findByUsername(username);
 			model.addAttribute("candidatelist", candidateRepo.findAll());
 			model.addAttribute("isvoted",voteRepo.findByUserId(user.getUserId()).getCandidateid());

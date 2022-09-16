@@ -15,6 +15,7 @@ public class User {
 	private String email;
 	private String phone;
 	private boolean isVoted;
+	private String role;
 	
 	public User() {
 		super();
@@ -25,7 +26,7 @@ public class User {
 	
 
 
-	public User(int userId, String username, String password, String email, String phone, boolean isVoted) {
+	public User(int userId, String username, String password, String email, String phone, boolean isVoted, String role) {
 		super();
 		this.userId = userId;
 		this.username = username;
@@ -33,6 +34,7 @@ public class User {
 		this.email = email;
 		this.phone = phone;
 		this.isVoted = isVoted;
+		this.role=role;
 	}
 
 
@@ -102,23 +104,25 @@ public class User {
 		return isVoted;
 	}
 
-
-
-
-
 	public void setVoted(boolean isVoted) {
 		this.isVoted = isVoted;
 	}
 
+	public String getRole() {
+		return role;
+	}
 
-
-
+	public void setRole(String role) {
+		this.role = role;
+	}
 
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", phone=" + phone + ", isVoted=" + isVoted + "]";
+				+ ", phone=" + phone + ", isVoted=" + isVoted + ", role=" + role + "]";
 	}
+
+
 
 
 

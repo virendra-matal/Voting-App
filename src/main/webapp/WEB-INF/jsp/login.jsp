@@ -43,6 +43,7 @@
 						}
 					session2.removeAttribute("logoutMessage");
 					%>
+					
 				<h2 class="text-center">Login</h2>
 				  <div class="form-group">
 				    <label for="exampleInputEmail1">Username :</label>
